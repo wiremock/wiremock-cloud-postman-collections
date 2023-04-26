@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "Import OpenAPI with config",
+			"name": "Import OpenAPI with base URL and duplicate policy config",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -32,6 +32,49 @@
 						{
 							"key": "file",
 							"value": "openapi: \"3.0.0\"\ninfo:\n  version: 1.0.0\n  title: Swagger Petstore\n  description: A sample API that uses a petstore as an example to demonstrate features in the OpenAPI 3.0 specification\n  termsOfService: http://swagger.io/terms/\n  contact:\n    name: Swagger API Team\n    email: apiteam@swagger.io\n    url: http://swagger.io\n  license:\n    name: Apache 2.0\n    url: https://www.apache.org/licenses/LICENSE-2.0.html\nservers:\n  - url: http://petstore.swagger.io/api\npaths:\n  /pets:\n    get:\n      description: |\n        Returns all pets from the system that the user has access to\n        Nam sed condimentum est. Maecenas tempor sagittis sapien, nec rhoncus sem sagittis sit amet. Aenean at gravida augue, ac iaculis sem. Curabitur odio lorem, ornare eget elementum nec, cursus id lectus. Duis mi turpis, pulvinar ac eros ac, tincidunt varius justo. In hac habitasse platea dictumst. Integer at adipiscing ante, a sagittis ligula. Aenean pharetra tempor ante molestie imperdiet. Vivamus id aliquam diam. Cras quis velit non tortor eleifend sagittis. Praesent at enim pharetra urna volutpat venenatis eget eget mauris. In eleifend fermentum facilisis. Praesent enim enim, gravida ac sodales sed, placerat id erat. Suspendisse lacus dolor, consectetur non augue vel, vehicula interdum libero. Morbi euismod sagittis libero sed lacinia.\n\n        Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.\n      operationId: findPets\n      parameters:\n        - name: tags\n          in: query\n          description: tags to filter by\n          required: false\n          style: form\n          schema:\n            type: array\n            items:\n              type: string\n        - name: limit\n          in: query\n          description: maximum number of results to return\n          required: false\n          schema:\n            type: integer\n            format: int32\n      responses:\n        '200':\n          description: pet response\n          content:\n            application/json:\n              schema:\n                type: array\n                items:\n                  $ref: '#/components/schemas/Pet'\n        default:\n          description: unexpected error\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/Error'\n    post:\n      description: Creates a new pet in the store.  Duplicates are allowed\n      operationId: addPet\n      requestBody:\n        description: Pet to add to the store\n        required: true\n        content:\n          application/json:\n            schema:\n              $ref: '#/components/schemas/NewPet'\n      responses:\n        '200':\n          description: pet response\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/Pet'\n        default:\n          description: unexpected error\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/Error'\n  /pets/{id}:\n    get:\n      description: Returns a user based on a single ID, if the user does not have access to the pet\n      operationId: find pet by id\n      parameters:\n        - name: id\n          in: path\n          description: ID of pet to fetch\n          required: true\n          schema:\n            type: integer\n            format: int64\n      responses:\n        '200':\n          description: pet response\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/Pet'\n        default:\n          description: unexpected error\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/Error'\n    delete:\n      description: deletes a single pet based on the ID supplied\n      operationId: deletePet\n      parameters:\n        - name: id\n          in: path\n          description: ID of pet to delete\n          required: true\n          schema:\n            type: integer\n            format: int64\n      responses:\n        '204':\n          description: pet deleted\n        default:\n          description: unexpected error\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/Error'\ncomponents:\n  schemas:\n    Pet:\n      allOf:\n        - $ref: '#/components/schemas/NewPet'\n        - required:\n          - id\n          properties:\n            id:\n              type: integer\n              format: int64\n\n    NewPet:\n      required:\n        - name\n      properties:\n        name:\n          type: string\n        tag:\n          type: string\n\n    Error:\n      required:\n        - code\n        - message\n      properties:\n        code:\n          type: integer\n          format: int32\n        message:\n          type: string",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{mock_api_base_url}}/__admin/mocklab/imports",
+					"host": [
+						"{{mock_api_base_url}}"
+					],
+					"path": [
+						"__admin",
+						"mocklab",
+						"imports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Import OpenAPI with copied headers",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{wiremock_cloud_api_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "config",
+							"value": "{\n  \"import\": {\n      \"copiedHeaderNames\": [\"X-Transaction-ID\", \"X-Correlation-ID\"]\n  }\n}",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"value": "swagger: \"2.0\"\ninfo:\n  description: \"Services related to customer.\"\n  version: \"1.3.0\"\n  title: \"Customer API\"\ntags:\n  - name: \"CMS\"\n    description: \"Operations for Adobe Experience Manager (CMS)\"\nschemes:\n  - \"https\"\npaths:\n  \"/content\":\n    get:\n      tags:\n        - \"CMS\"\n      summary: \"Get CMS Content\"\n      description: \"Get CMS content based on content type\"\n      operationId: \"getContentUsingGET\"\n      consumes:\n        - \"application/json\"\n      produces:\n        - \"application/json\"\n      parameters:\n        - name: \"contentPath\"\n          in: \"query\"\n          description: \"Content Path\"\n          required: true\n          type: \"string\"\n        - name: \"X-Correlation-ID\"\n          in: \"header\"\n          description: \"Correlation ID\"\n          required: false\n          type: \"string\"\n        - name: \"X-Transaction-ID\"\n          in: \"header\"\n          description: \"Unique transaction ID to provision cross tier traceability.\"\n          required: false\n          type: \"string\"\n      responses:\n        '200':\n          description: \"0: Success\"\n          schema:\n            $ref: '#/definitions/ContentResponse'\ndefinitions:\n  ContentResponse:\n    type: \"object\"\n    properties:\n      content:\n        type: \"string\"\n        description: \"CMS content (JSON represented as string) associated with given contentPath\"\n        example: \"[{ topic: 'View Accounts & Activity', title: '', description: '' }, { topic: 'View Accounts & Activity', title: '', description: '' }, { topic: 'View Accounts & Activity', title: '', description: '' }]\"\n",
 							"type": "text"
 						}
 					]
