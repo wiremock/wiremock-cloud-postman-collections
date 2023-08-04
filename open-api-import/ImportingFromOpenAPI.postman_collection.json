@@ -4,7 +4,8 @@
 		"name": "Importing from OpenAPI",
 		"description": "This collection requires two variables to get started: one containing your username (usually your email address) named `wiremock_cloud_username` and a secret variable named `wiremock_cloud_api_token` . The value for this can be found at [https://app.wiremock.cloud/account/api.](https://app.wiremock.cloud/account/api.The)\n\nBefore attempting to import anything you first need to create a mock API, which you can do either via the UI or using the \"Create mock API\" request via the following steps:\n\n1. Edit the name of the API in the body to whatever you want.\n2. Hit Send.\n3. Extract the `baseUrl` attribute from the response and set it in a variable named `mock_api_base_url`\n    \n\nThe following workflow should be used to create a mock API from OpenAPI that can be run from WireMock Standalone:\n\n1. Clear stubs (deletes all stubs)\n2. Using the \"Import OpenAPI with schema and 400s enabled\" request, set the file part of the body to the OpenAPI spec you wish to import.\n3. Hit Send to apply the import.\n4. Run the \"Export stubs\" request.\n5. Export the response to a .json file and place this under the `mappings` directory in your WireMock standalone installation.\n6. Restart the standalone process to load the mappings from the file.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "3504886"
+		"_exporter_id": "3504886",
+		"_collection_link": "https://mocklab-test.postman.co/workspace/Team-Workspace~f88f7d20-bc72-4244-891d-c07cc5043d27/collection/3504886-b9ad5ba8-180c-45be-a1c6-de283afbd188?action=share&creator=3504886&source=collection_link"
 	},
 	"item": [
 		{
@@ -26,7 +27,7 @@
 					"formdata": [
 						{
 							"key": "config",
-							"value": "{\n  \"import\": {\n    \"duplicatePolicy\": \"ALWAYS_OVERWRITE\"\n  }\n}",
+							"value": "{\n  \"import\": {\n    \"duplicatePolicy\": \"ALWAYS_OVERWRITE\",\n    \"baseUrl\": \"/v6\"\n  }\n}",
 							"type": "text"
 						},
 						{
@@ -112,7 +113,50 @@
 					"formdata": [
 						{
 							"key": "config",
-							"value": "{\n  \"import\": {\n    \"duplicatePolicy\": \"ALWAYS_OVERWRITE\",\n    \"prefer400ForInvalidRequestBody\": true,\n    \"matchRequestBodyJsonSchema\": true\n  }\n}",
+							"value": "{\n  \"import\": {\n    \"duplicatePolicy\": \"ALWAYS_OVERWRITE\",\n    \"prefer400ForInvalidRequestBody\": true,\n    \"useJsonSchemas\": true\n  }\n}",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"value": "openapi: \"3.0.0\"\ninfo:\n  version: 1.0.0\n  title: A POST that can go bad\n\npaths:\n  /posts:\n    post:\n      description: Creates a new post.\n      operationId: create_post\n      requestBody:\n        description: Post to create\n        required: true\n        content:\n          application/json:\n            schema:\n              $ref: '#/components/schemas/NewPost'\n\n      responses:\n        '200':\n          description: Post response\n          content:\n            application/json:\n                schema:\n                  allOf:\n                    - properties:\n                        id:\n                          type: string\n                          format: uuid\n                    - $ref: '#/components/schemas/NewPost'\n\n                examples:\n                  example-one:\n                    summary: First example\n                    value:\n                      title: Number one\n                      content: This is the first post's content\n\n                  example-two:\n                    summary: Second example\n                    value:\n                      title: Number two\n                      content: This is the second post's content\n\n\n        '400':\n          description: Request error\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/Error'\n\n        '422':\n          description: Bad request entity\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/Error'\n\ncomponents:\n  schemas:\n    NewPost:\n      required:\n        - title\n        - content\n      properties:\n        title:\n          type: string\n        content:\n          type: string\n        version:\n          type: integer\n          format: int32\n\n    Error:\n      required:\n        - code\n        - message\n      properties:\n        code:\n          type: integer\n          format: int32\n        message:\n          type: string",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{mock_api_base_url}}/__admin/mocklab/imports",
+					"host": [
+						"{{mock_api_base_url}}"
+					],
+					"path": [
+						"__admin",
+						"mocklab",
+						"imports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Import OpenAPI with schemas and 400s enabled and copied uuid header",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{wiremock_cloud_api_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "config",
+							"value": "{\n  \"import\": {\n    \"duplicatePolicy\": \"ALWAYS_OVERWRITE\",\n    \"prefer400ForInvalidRequestBody\": true,\n    \"useJsonSchemas\": true,\n    \"copiedHeaderNames\": [\"uuid\"]\n  }\n}",
 							"type": "text"
 						},
 						{
@@ -155,7 +199,7 @@
 					"formdata": [
 						{
 							"key": "config",
-							"value": "{\n  \"import\": {\n    \"duplicatePolicy\": \"ALWAYS_OVERWRITE\",\n    \"syncTimeout\": \"PT0.001S\",\n    \"prefer400ForInvalidRequestBody\": true,\n    \"matchRequestBodyJsonSchema\": true\n  }\n}",
+							"value": "{\n  \"import\": {\n    \"duplicatePolicy\": \"ALWAYS_OVERWRITE\",\n    \"syncTimeout\": \"PT0.001S\",\n    \"prefer400ForInvalidRequestBody\": true,\n    \"useJsonSchemas\": true\n  }\n}",
 							"type": "text"
 						},
 						{
