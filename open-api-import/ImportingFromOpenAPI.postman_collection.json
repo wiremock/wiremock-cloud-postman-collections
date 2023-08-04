@@ -4,8 +4,7 @@
 		"name": "Importing from OpenAPI",
 		"description": "This collection requires two variables to get started: one containing your username (usually your email address) named `wiremock_cloud_username` and a secret variable named `wiremock_cloud_api_token` . The value for this can be found at [https://app.wiremock.cloud/account/api.](https://app.wiremock.cloud/account/api.The)\n\nBefore attempting to import anything you first need to create a mock API, which you can do either via the UI or using the \"Create mock API\" request via the following steps:\n\n1. Edit the name of the API in the body to whatever you want.\n2. Hit Send.\n3. Extract the `baseUrl` attribute from the response and set it in a variable named `mock_api_base_url`\n    \n\nThe following workflow should be used to create a mock API from OpenAPI that can be run from WireMock Standalone:\n\n1. Clear stubs (deletes all stubs)\n2. Using the \"Import OpenAPI with schema and 400s enabled\" request, set the file part of the body to the OpenAPI spec you wish to import.\n3. Hit Send to apply the import.\n4. Run the \"Export stubs\" request.\n5. Export the response to a .json file and place this under the `mappings` directory in your WireMock standalone installation.\n6. Restart the standalone process to load the mappings from the file.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "3504886",
-		"_collection_link": "https://mocklab-test.postman.co/workspace/Team-Workspace~f88f7d20-bc72-4244-891d-c07cc5043d27/collection/3504886-b9ad5ba8-180c-45be-a1c6-de283afbd188?action=share&creator=3504886&source=collection_link"
+		"_exporter_id": "3504886"
 	},
 	"item": [
 		{
